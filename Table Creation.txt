@@ -1,0 +1,111 @@
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Create {
+
+   public static void createNewDatabase(String filename) {
+    
+       String url = "jdbc:sqlite:C:/sqlite/" + filename;
+
+       try {
+           Connection conn = DriverManager.getConnection(url);
+           if (conn != null) {
+               DatabaseMetaData meta = conn.getMetadata();
+               System.out.println("The driver name is " + meta.getDriverName());
+               System.out.println("A new database has been created.");
+           }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public static void createNewTable() {
+    
+       String url = "jdbc:sqlite:C://sqlite/SSSIT.db";
+
+       String sql = "CREATE TABLE IF NOT EXISTS Movies (\n"
+               + " MName text,\n"
+               + " Actor text,\n"
+               + " Actress text,\n"
+               + " Year text,\n"
+               + " Director text\n"
+               + ");";
+
+       try {
+            Connection conn = DriveManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+            conn.close();
+          } catch (SQLException e) {
+              System.out.println(e.getMessage());
+          }
+     }
+private Connection connect() {
+         // SQLite connection string
+         String url = "jdbe:sqlite:C://sqlite/SSSIT.db";
+         Connection conn = null;  
+         try {
+             conn = DriverManager.getConnection(url);
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+         }
+         return conn;
+     }
+     
+
+     public void insert(String mname,String A,String B,String y, String d) {
+         String sql = "INSERT INTO Movies(MName,Actor,Actress,Year,Director) VALUES(?,?,?,?,?)";
+
+         try{
+             Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             pstmt.setString(1, mname);
+             pstmt.setString(2, A);
+             pstmt.setString(3, B);
+             pstmt.setString(4, y);
+             pstmt.setString(5, d);
+
+             pstmt.executeUpdate();
+             conn.close();
+         } catch (SQLException e) {
+             System.out.println(e.getMessage());
+         }
+    }
+
+
+         public void selectAll(){
+         String sql = "SELECT * FROM Movies";
+
+         try {
+             Connection conn = this.connect();
+             Statement stmt = conn.createStatment();
+             ResultSet rs   = stmt. executeQuery(sql);
+
+             // loop through the result set 
+             while (rs. next()) {
+                 System.out.println(rs.getString("MName") + "\t" +
+                                    rs.getString("Actor") + "\t" +
+                                    rs.getString("Actress")+"\t"+rs.getString("Year")+"\t"+rs.getString("Director"));
+              conn.close();
+              }
+          } catch (SQLExeception e) {
+              System.out.println(e.getMessage());
+          }
+     }
+
+     public static void main(String[] args) {
+
+          Create app = new Create();
+          app.createNewDatabase("SSSIT,db");
+          app.createNewTable();
+          app.insert("BheemlaNayak","PK","NM","2022","SKC");
+          app.insert("Eega","Nani","Sam","2012","ssr");
+          app.selectAll();
+
+     }
+}
+    
